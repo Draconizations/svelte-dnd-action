@@ -357,7 +357,7 @@ export function dndzone(node, options) {
         currentMousePosition = undefined;
 
         // dragging initiated by touch events prevents onclick from initially firing
-        if (e.type === "touchend") {
+        if (e.type === "touchend" && e.target === e.currentTarget) {
             e.target.click();
         }
     }
@@ -389,7 +389,9 @@ export function dndzone(node, options) {
             printDebug(() => "cannot start a new drag before finalizing previous one");
             return;
         }
-        e.preventDefault();
+        if (e.target === e.currentTarget) {
+            e.preventDefault();
+        }
         e.stopPropagation();
         const c = e.touches ? e.touches[0] : e;
         dragStartMousePosition = {x: c.clientX, y: c.clientY};
